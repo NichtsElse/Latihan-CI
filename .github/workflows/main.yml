@@ -42,9 +42,13 @@ jobs:
           cd Latihan-CI/MLproject
           mlflow run . --env-manager=local
 
-      # Unggah hasil model (mlruns) ke GitHub Artifacts (Solusi Berkas Besar)
-      - name: Upload MLflow Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlflow-model-artifacts
-          path: Latihan-CI/MLproject/mlruns/
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+        
+      - name: Upload to Google Drive
+        env:
+          GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}  # Mengambil kredensial dari GitHub Secrets
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}  # Mengambil kredensial dari GitHub Secrets
+        run: |
+          python MLproject/upload_to_gdrive.py
