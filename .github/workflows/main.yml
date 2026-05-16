@@ -80,7 +80,7 @@ jobs:
 
         run: |
 
-          mlflow run MLproject --env-manager=local 
+          mlflow run ./MLproject --env-manager=local 
 
  
 
@@ -98,4 +98,4 @@ jobs:
 
           git commit -m "Save mlruns from CI run"
 
-          git push origin master
+          git push origin main
