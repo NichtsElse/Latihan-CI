@@ -80,7 +80,7 @@ jobs:
 
         run: |
 
-          mlflow run ./MLproject --env-manager=local 
+          mlflow run Latihan-CI/MLproject/MLproject --env-manager=local 
 
  
 
