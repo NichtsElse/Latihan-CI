@@ -45,10 +45,15 @@ jobs:
       - name: Install Python dependencies
         run: |
           pip install --upgrade google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+
+      - name: Authenticate to Google Drive
+        run: |
+          cat << 'EOF' > Latihan-CI/MLproject/credentials.json
+          ${{ secrets.GDRIVE_CREDENTIALS }}
+          EOF
         
       - name: Upload to Google Drive
         env:
-          GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}  # Mengambil kredensial dari GitHub Secrets
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}  # Mengambil kredensial dari GitHub Secrets
         run: |
           cd Latihan-CI/MLproject
