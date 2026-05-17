@@ -40,9 +40,33 @@ jobs:
         run: |
           cd Latihan-CI/MLproject
           mlflow run . --env-manager=local
-      # Unggah hasil model (mlruns) ke GitHub Artifacts (Solusi Berkas Besar)
-      - name: Upload MLflow Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: mlflow-model-artifacts
-          path: Latihan-CI/MLproject/mlruns/
+          
+      - name: Set up Git LFS
+        run: |
+          git config --global user.name ${{ secrets.username }}
+          git config --global user.email ${{ secrets.email }}
+          git lfs install
+          git lfs track "mlruns/**"
+          git add .gitattributes
+          git commit -m "Track large files in mlruns with Git LFS" || true
+          git push origin main
+          
+      # Save models to GitHub Repository
+      - name: Save mlruns to repo
+        run: |
+          git config --global user.name ${{ secrets.username }}
+          git config --global user.email ${{ secrets.email }}
+          git add -f mlruns/
+          git commit -m "Save mlruns from CI run" || true
+          git push origin main
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
+        
+      - name: Upload to Google Drive
+        env:
+          GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}  # Mengambil kredensial dari GitHub Secrets
+          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}  # Mengambil kredensial dari GitHub Secrets
+        run: |
+          python MLproject/upload_to_gdrive.py
