@@ -16,37 +16,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checks-out your repository under $GITHUB_WORKSPACE
+      # Checks-out your repository under $GITHUB_WORKSPACE
       - uses: actions/checkout@v3
 
-      # 2. Setup Python 3.12.7
+      # Setup Python 3.12.7
       - name: Set up Python 3.12.7
         uses: actions/setup-python@v4
         with:
           python-version: "3.12.7"
-          
-      # 3. Check Env Variables
+      
+      # Check Env Variables
       - name: Check Env
         run: |
           echo $CSV_URL
-
-      # 4. Install MLflow & Google API dependencies
+      # Install mlflow
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install mlflow google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client
-          
-      # 5. Run as a mlflow project
+          pip install mlflow
+      
+      # Run as a mlflow project
       - name: Run mlflow project
         run: |
-          cd MLproject
+          cd Latihan-CI/MLproject
           mlflow run . --env-manager=local
-
-      # 6. Upload model directly to Google Drive using Environment Secrets
-      - name: Upload to Google Drive
-        env:
-          GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}
-          GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
-        run: |
-          cd MLproject
-          python upload_to_gdrive.py
+      # Unggah hasil model (mlruns) ke GitHub Artifacts (Solusi Berkas Besar)
+      - name: Upload MLflow Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mlflow-model-artifacts
+          path: Latihan-CI/MLproject/mlruns/
