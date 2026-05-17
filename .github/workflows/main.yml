@@ -39,7 +39,7 @@ jobs:
       # 5. Run as a mlflow project
       - name: Run mlflow project
         run: |
-          cd Latihan-CI/MLproject
+          cd MLproject
           mlflow run . --env-manager=local
 
       # 6. Upload model directly to Google Drive using Environment Secrets
@@ -48,5 +48,5 @@ jobs:
           GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}
         run: |
-          cd Latihan-CI/MLproject
+          cd MLproject
           python upload_to_gdrive.py
