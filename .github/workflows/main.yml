@@ -9,7 +9,7 @@ on:
       - main
 
 env:
-  CSV_URL: "MLproject/train_pca.csv"
+  CSV_URL: "Latihan-CI/MLproject/train_pca.csv"
 
 jobs:
   build:
@@ -69,4 +69,4 @@ jobs:
           GDRIVE_CREDENTIALS: ${{ secrets.GDRIVE_CREDENTIALS }}  # Mengambil kredensial dari GitHub Secrets
           GDRIVE_FOLDER_ID: ${{ secrets.GDRIVE_FOLDER_ID }}  # Mengambil kredensial dari GitHub Secrets
         run: |
-          python cd Latihan-CI/MLproject && Latihan-CI/MLproject/upload_to_gdrive.py
+          python Latihan-CI/MLproject/upload_to_gdrive.py
